@@ -51,15 +51,17 @@ class PracticalTest02MainActivity : AppCompatActivity() {
             if (port != null) {
                 serverThread = Thread {
                     val serverSocket = ServerSocket(port)
-                    runOnUiThread { serverStatusTextView.text = "Server pornit pe portul $port" }
+                    runOnUiThread { serverStatusTextView.text = "Server started on port $port" }
                     while (!Thread.currentThread().isInterrupted) {
                         val clientSocket = serverSocket.accept()
-                        handleClient(clientSocket)
+                        Thread {
+                            handleClient(clientSocket)
+                        }.start()
                     }
                 }
                 serverThread?.start()
             } else {
-                serverStatusTextView.text = "Port invalid!"
+                serverStatusTextView.text = "Invalid port!"
             }
         }
 
@@ -93,28 +95,33 @@ class PracticalTest02MainActivity : AppCompatActivity() {
                         }
 
                         runOnUiThread {
-                            responseTextView.text = "Răspuns: $response"
+                            responseTextView.text = "Response: $response"
                         }
 
                         socket.close()
                     } catch (e: Exception) {
                         runOnUiThread {
-                            responseTextView.text = "Eroare: ${e.message}"
+                            responseTextView.text = "Error: ${e.message}"
                         }
                     }
                 }.start()
             } else {
-                responseTextView.text = "Date invalide!"
+                responseTextView.text = "Invalid input!"
             }
         }
     }
 
     private fun handleClient(clientSocket: Socket) {
+        val clientAddress = clientSocket.inetAddress.hostAddress
+        println("New connection from $clientAddress")
+
         val reader = Scanner(clientSocket.getInputStream())
         val writer = PrintWriter(clientSocket.getOutputStream(), true)
 
         val city = reader.nextLine()
         val infoType = reader.nextLine()
+
+        println("Request received: city=$city, infoType=$infoType from $clientAddress")
 
         val weatherData = weatherCache[city] ?: fetchWeatherData(city)?.also {
             weatherCache[city] = it
@@ -141,6 +148,7 @@ class PracticalTest02MainActivity : AppCompatActivity() {
             writer.println("Error fetching weather data for city: $city")
         }
 
+        println("Response sent to $clientAddress")
         clientSocket.close()
     }
 
@@ -162,5 +170,10 @@ class PracticalTest02MainActivity : AppCompatActivity() {
             e.printStackTrace()
             null
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        serverThread?.interrupt()
     }
 }
