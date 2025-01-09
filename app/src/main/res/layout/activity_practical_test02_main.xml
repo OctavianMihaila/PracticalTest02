@@ -1,19 +1,100 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PracticalTest02MainActivity">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RadioGroup
+        android:id="@+id/functionality_selector"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/radio_server"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Server" />
+        <RadioButton
+            android:id="@+id/radio_client"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Client" />
+    </RadioGroup>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Layout pentru funcționalitatea de Server -->
+    <LinearLayout
+        android:id="@+id/server_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/server_port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Introduceți portul serverului"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/start_server_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pornește Serverul" />
+
+        <TextView
+            android:id="@+id/server_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stare: Oprit"
+            android:paddingTop="8dp" />
+    </LinearLayout>
+
+    <!-- Layout pentru funcționalitatea de Client -->
+    <LinearLayout
+        android:id="@+id/client_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/client_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Adresa Serverului" />
+
+        <EditText
+            android:id="@+id/client_port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Portul Serverului"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/city_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Orașul dorit" />
+
+        <EditText
+            android:id="@+id/information_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tipul informației (ex. all)" />
+
+        <Button
+            android:id="@+id/send_request_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Trimite Cererea" />
+
+        <TextView
+            android:id="@+id/response_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="Răspuns: " />
+    </LinearLayout>
+</LinearLayout>
